@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import IDCard from './IDCard';
 import KnowledgeTree from './KnowledgeTree';
+import '../../styles/profile.css'; // Ensure the CSS is imported!
 
 export default function ProfilePage() {
-  // We keep the mock data right here in the state!
-  // Later: setMockUser(await supabase.from('users').select('*'))
   const [mockUser] = useState({
     username: "RUNTIME_TERROR",
     guildName: "NEWTONS_APPLES",
-    globalRating: 1450, // Total skill number
-    archetype: "The Speed Solver", // Playstyle
+    globalRating: 1450,
+    archetype: "The Speed Solver",
     battles: 142,
     wins: 89,
     subjects: {
@@ -31,31 +30,39 @@ export default function ProfilePage() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto p-8 pt-24 min-h-screen text-white cursor-none">
+    <div className="page-wrap">
       
-      <div className="grid grid-cols-1 md:grid-cols-[320px_1fr] gap-8">
+      {/* HEADER */}
+      <div className="page-header" style={{ marginBottom: '32px' }}>
+        <div className="page-header-left">
+          <div className="chip chip-b">👤 PLAYER DOSSIER</div>
+          <h1 style={{ color: 'var(--blue)', textShadow: '3px 3px 0 var(--bd)', marginTop: '8px' }}>COMBAT RECORD</h1>
+        </div>
+      </div>
+
+      <div className="profile-layout">
         
         {/* LEFT COLUMN: The ID Card */}
-        <div className="flex flex-col gap-6">
+        <div className="p-col-left">
           <IDCard user={mockUser} />
         </div>
 
         {/* RIGHT COLUMN: Stats & Knowledge Tree */}
-        <div className="flex flex-col gap-6">
+        <div className="p-col-right">
           
           {/* Top Stats Bar */}
-          <div className="bg-gray-900 border-2 border-blue-500 p-4 shadow-[4px_4px_0px_#1e3a8a] grid grid-cols-3 gap-4 text-center">
-            <div className="bg-black/50 p-4 border border-gray-700">
-              <div className="font-pixel text-[10px] text-gray-400 mb-2">GLOBAL RATING</div>
-              <div className="font-pixel text-xl text-yellow-400">{mockUser.globalRating}</div>
+          <div className="stats-grid" style={{ padding: 0, marginBottom: '8px' }}>
+            <div className="stat-box">
+              <div className="sb-lbl">GLOBAL RATING</div>
+              <div className="sb-val" style={{ color: 'var(--yellow)' }}>{mockUser.globalRating}</div>
             </div>
-            <div className="bg-black/50 p-4 border border-gray-700">
-              <div className="font-pixel text-[10px] text-gray-400 mb-2">BATTLES</div>
-              <div className="font-pixel text-xl text-white">{mockUser.battles}</div>
+            <div className="stat-box">
+              <div className="sb-lbl">BATTLES</div>
+              <div className="sb-val" style={{ color: 'var(--white)' }}>{mockUser.battles}</div>
             </div>
-            <div className="bg-black/50 p-4 border border-gray-700">
-              <div className="font-pixel text-[10px] text-gray-400 mb-2">VICTORIES</div>
-              <div className="font-pixel text-xl text-green-400">{mockUser.wins}</div>
+            <div className="stat-box">
+              <div className="sb-lbl">VICTORIES</div>
+              <div className="sb-val" style={{ color: 'var(--green)' }}>{mockUser.wins}</div>
             </div>
           </div>
 

@@ -5,7 +5,6 @@ export default function Navbar({ onOpenAuth }) {
   const location = useLocation();
   const [user, setUser] = useState(localStorage.getItem('vdsa_user'));
 
-  // Listen for our custom login event to update the UI instantly
   useEffect(() => {
     const handleAuthChange = () => {
       setUser(localStorage.getItem('vdsa_user'));
@@ -16,22 +15,23 @@ export default function Navbar({ onOpenAuth }) {
 
   return (
     <nav id="nav">
-      <Link to="/" className="nav-logo">▶ VisualDSA</Link>
+      <Link to="/" className="nav-logo">▶ EduRoyal</Link>
       <ul className="nav-links">
         <li>
           <Link to="/" className={location.pathname === '/' ? 'active' : ''}>[HOME]</Link>
         </li>
         <li>
-          <Link to="/battle" className={`battle-link ${location.pathname === '/battle' ? 'active' : ''}`}>[⚔ BATTLE]</Link>
+          <Link to="/battle" className={location.pathname === '/battle' ? 'active' : ''}>[⚔ BATTLE]</Link>
         </li>
         <li>
-          <Link to="/learn" className={`learn-link ${location.pathname === '/learn' ? 'active' : ''}`}>[📖 LEARN]</Link>
+          <Link to="/learn" className={location.pathname === '/learn' ? 'active' : ''}>[📖 LEARN]</Link>
         </li>
         <li>
-          <Link to="#" className="rank-link">[RANKS]</Link>
+          {/* FIXED: Now properly routes to /ranks and handles active state */}
+          <Link to="/ranks" className={location.pathname === '/ranks' ? 'active' : ''}>[🏆 RANKS]</Link>
         </li>
         <li>
-          <Link to="/guild" className={`guild-link ${location.pathname === '/guild' ? 'active' : ''}`}>[🛡️ GUILD]</Link>
+          <Link to="/guild" className={location.pathname === '/guild' ? 'active' : ''}>[🛡️ GUILD]</Link>
         </li>
       </ul>
       <div className="nav-cta">

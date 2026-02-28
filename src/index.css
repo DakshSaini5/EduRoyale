@@ -93,3 +93,71 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* ============================================================
+/* ============================================================
+   SOLID RETRO NAVBAR STYLING (Perfectly matched to Navbar.jsx)
+   ============================================================ */
+
+#nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #050508; /* Solid dark background */
+  border-bottom: 3px solid var(--purple); /* Harsh neon purple border */
+  box-shadow: 0 6px 0 rgba(162, 89, 255, 0.15); /* Retro blocky shadow */
+  padding: 16px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 1. Logo Styling */
+#nav .nav-logo {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  color: var(--white);
+  text-decoration: none;
+  text-shadow: 3px 3px 0 var(--purple);
+  transition: 0.2s;
+}
+
+#nav .nav-logo:hover {
+  color: var(--purple);
+  text-shadow: 3px 3px 0 var(--white);
+}
+
+/* 2. Nav Links Container */
+#nav .nav-links {
+  display: flex;
+  list-style: none;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+}
+
+/* 3. The Links themselves (like [HOME], [BATTLE]) */
+#nav .nav-links a {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-decoration: none;
+  padding: 8px 12px;
+  border: 2px solid transparent;
+  transition: 0.1s;
+}
+
+/* Hover and Active States for the Links */
+#nav .nav-links a:hover, 
+#nav .nav-links a.active {
+  color: var(--yellow);
+  background: rgba(255, 214, 10, 0.1);
+  border-color: var(--yellow);
+}
+
+/* 4. Right Side CTA Buttons Container */
+#nav .nav-cta {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}

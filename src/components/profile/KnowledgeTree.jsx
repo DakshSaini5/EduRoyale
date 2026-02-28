@@ -1,34 +1,38 @@
 import React from 'react';
 
 export default function KnowledgeTree({ subjects }) {
-  // Convert the subjects object into an array so we can loop through it
   const subjectList = Object.entries(subjects);
 
   return (
-    <div className="bg-gray-900 border-2 border-purple-500 p-4 shadow-[4px_4px_0px_#581c87]">
-      <div className="font-pixel text-[12px] text-purple-400 border-b-2 border-gray-700 pb-2 mb-4">
+    <div className="p-panel" style={{ borderColor: 'var(--purple)' }}>
+      <div className="p-panel-head" style={{ color: 'var(--purple)' }}>
         🌳 KNOWLEDGE TREE
       </div>
       
-      <div className="font-terminal text-xl pl-2 border-l-2 border-dashed border-gray-700">
+      <div style={{ padding: '24px', fontFamily: '"VT323", monospace', fontSize: '22px' }}>
         {subjectList.map(([subjectName, data]) => (
-          <div key={subjectName} className="mb-4 ml-4 relative">
+          <div key={subjectName} style={{ marginBottom: '24px' }}>
+            
             {/* Subject Title */}
-            <div className="text-yellow-400 font-pixel text-[12px] mb-2 uppercase">
-              ▶ {subjectName}
+            <div style={{ color: 'var(--yellow)', fontFamily: '"Press Start 2P", monospace', fontSize: '10px', marginBottom: '12px' }}>
+              ▶ {subjectName} (RATING: {data.rating})
             </div>
             
-            {/* Subtopics Loop */}
-            <ul className="pl-4 text-gray-400 flex flex-col gap-1">
+            {/* Subtopics Loop with Dashed Line */}
+            <ul style={{ listStyle: 'none', paddingLeft: '16px', margin: '0 0 0 8px', borderLeft: '2px dashed var(--border)', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {Object.entries(data.topics).map(([topicName, topicData]) => (
                 <li 
                   key={topicName} 
-                  className={topicData.masteryPercent === 100 ? "text-green-400 drop-shadow-[0_0_5px_#4ade80]" : "text-gray-500"}
+                  style={{ 
+                    color: topicData.masteryPercent === 100 ? 'var(--green)' : 'var(--muted)',
+                    textShadow: topicData.masteryPercent === 100 ? '0 0 8px rgba(61,255,154,0.4)' : 'none'
+                  }}
                 >
                   ↳ {topicName} ({topicData.masteryPercent}%)
                 </li>
               ))}
             </ul>
+
           </div>
         ))}
       </div>

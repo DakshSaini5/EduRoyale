@@ -264,7 +264,7 @@ export default function Home() {
       </div>
 
       <footer>
-        <div className="fl">▶ VISUALDSA</div>
+        <div className="fl">▶ Eduroyale</div>
         <div className="fli">
           <Link to="/learn">LEARN</Link>
           <Link to="/battle">ARENA</Link>
@@ -272,7 +272,7 @@ export default function Home() {
           <Link to="#">GITHUB</Link>
           <Link to="#">PRIVACY</Link>
         </div>
-        <div className="fc2">© 2026 VISUALDSA · MADE WITH 8BIT LOVE</div>
+        <div className="fc2">© 2026 Eduroyale · MADE WITH 8BIT LOVE</div>
       </footer>
     </>
   );
