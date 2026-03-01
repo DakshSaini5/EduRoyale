@@ -4,6 +4,17 @@
 
 .page-wrap { max-width: 1200px; margin: 0 auto; padding: 84px 48px 60px; }
 
+/* ── MASCOT ANIMATIONS ── */
+@keyframes mascot-idle-bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%            { transform: translateY(-16px); }
+}
+@keyframes mascot-victory {
+  0%   { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+  60%  { transform: scale(1.15) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
 /* ── PAGE HEADER ── */
 .page-header { margin-bottom: 32px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
 .page-header-left h1 { font-family: 'Press Start 2P', monospace; font-size: clamp(14px,2vw,22px); color: var(--pink); text-shadow: 3px 3px 0 var(--pd); margin-bottom: 6px; margin-top: 8px; }

@@ -18,6 +18,12 @@
 }
 .ranks-header p { color: var(--muted); font-size: 16px; }
 
+/* ── MASCOT FLOAT ── */
+@keyframes mascot-float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
 /* ── TABLE CONTAINERS ── */
 .table-section {
   background: var(--card);

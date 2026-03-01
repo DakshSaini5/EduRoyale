@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/home.css'; 
+import '../styles/home.css';
+import { MASCOT, MASCOT_ALT } from '../mascot';
 
 export default function Home() {
   // ─── SCROLL REVEAL EFFECT ───
@@ -75,6 +76,14 @@ export default function Home() {
         <div className="debris" style={{ left: '82%', top: '70%', animationDelay: '.5s' }}>★</div>
         <div className="debris" style={{ left: '93%', top: '18%', animationDelay: '1.5s', fontSize: '10px' }}>■</div>
         <div className="debris" style={{ left: '3%', top: '50%', animationDelay: '3s', fontSize: '10px' }}>●</div>
+
+        {/* ─── MASCOT — HERO ─── */}
+        <img
+          src={MASCOT.hero}
+          alt={MASCOT_ALT}
+          className="mascot-hero"
+          draggable="false"
+        />
 
         <div className="hero-badge"><span className="bdot"></span> ★ 12,000+ STUDENTS IN THE ARENA ★</div>
 
@@ -244,6 +253,8 @@ export default function Home() {
       {/* ─── CTA & FOOTER ─── */}
       <div className="cta-wrap reveal si">
         <div className="cta-box">
+          {/* ─── MASCOT — CTA ─── */}
+          <img src={MASCOT.rank} alt={MASCOT_ALT} className="mascot-cta" draggable="false" />
           <span className="cta-em">🚀</span>
           <div className="oi"><span className="oi-dot"></span> 284 PLAYERS ONLINE</div>
           <div className="cta-t">

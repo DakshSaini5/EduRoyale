@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import '../styles/battle.css';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../context/AuthContext';
+import { MASCOT, MASCOT_ALT } from '../mascot';
 
 export default function Battle() {
   const { user } = useAuth(); 
@@ -133,7 +134,18 @@ export default function Battle() {
       <div className="b-arena">
         {/* IDLE STATE */}
         {battleState === 'idle' && (
-          <div className="b-state-idle" style={{ textAlign: 'center', padding: '60px 20px' }}>
+          <div className="b-state-idle" style={{ textAlign: 'center', padding: '40px 20px' }}>
+            <img
+              src={MASCOT.battle}
+              alt={MASCOT_ALT}
+              style={{
+                width: 'clamp(180px, 22vw, 300px)',
+                marginBottom: '24px',
+                filter: 'drop-shadow(0 0 32px rgba(255,60,172,0.5))',
+                animation: 'mascot-idle-bounce 1s step-end infinite',
+              }}
+              draggable="false"
+            />
             <div style={{ fontSize: '24px', color: 'var(--white)', marginBottom: '16px' }}>READY TO ENTER THE ARENA?</div>
             <p style={{ fontSize: '18px', color: 'var(--muted)', marginBottom: '40px' }}>You will be matched against an opponent of similar ELO. First to solve wins.</p>
             <button onClick={startMatchmaking} className="px-btn px-btn-r" style={{ fontSize: '16px', padding: '16px 32px' }}>FIND MATCH ▶</button>
@@ -211,6 +223,18 @@ export default function Battle() {
 
         {battleState === 'results' && (
           <div className="winner-summary show">
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '28px 0 0' }}>
+              <img
+                src={MASCOT.referee}
+                alt={MASCOT_ALT}
+                style={{
+                  width: 'clamp(150px, 18vw, 220px)',
+                  filter: 'drop-shadow(0 0 30px rgba(61,255,154,0.6))',
+                  animation: 'mascot-victory 0.6s steps(4) both',
+                }}
+                draggable="false"
+              />
+            </div>
             <div className={`ws-banner ${p1Status === 'submitted' && timeLeft > 0 ? 'p1-wins' : ''}`}>
               {p1Status === 'submitted' && timeLeft > 0 ? `▶ VICTORY: ${currentUser} ◀` : `▶ DEFEAT: OUT OF TIME ◀`}
             </div>
