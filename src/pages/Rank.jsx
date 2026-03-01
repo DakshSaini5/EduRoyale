@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../context/AuthContext';
 import '../styles/rank.css';
+import { MASCOT, MASCOT_ALT } from '../mascot';
 
 export default function Ranks() {
   const { user } = useAuth();
@@ -57,6 +58,13 @@ export default function Ranks() {
   return (
     <div className="ranks-wrap">
       <div className="ranks-header">
+        <img src={MASCOT.rank} alt={MASCOT_ALT} style={{
+          width: 'clamp(120px, 14vw, 200px)',
+          display: 'block',
+          margin: '0 auto 16px',
+          filter: 'drop-shadow(0 0 28px rgba(255,214,10,0.5))',
+          animation: 'mascot-float 3s ease-in-out infinite',
+        }} draggable="false" />
         <h1>COMPETITIVE HUB</h1>
         <p>Global leaderboards, guild standings, and live match feeds.</p>
       </div>

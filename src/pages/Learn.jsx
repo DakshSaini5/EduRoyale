@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 import { useAuth } from '../context/AuthContext';
-import '../styles/learn.css'; 
+import '../styles/learn.css';
+import { MASCOT, MASCOT_ALT } from '../mascot';
 
 export default function Learn() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const { subjectId } = useParams(); // Catches the 'dsa' from /learn/dsa
+  
   const [modules, setModules] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeSubject, setActiveSubject] = useState('All');
@@ -54,10 +59,30 @@ export default function Learn() {
   return (
     <div className="page-wrap">
       
-      <div className="page-header" style={{ marginBottom: '32px' }}>
-        <div className="chip chip-b">📖 KNOWLEDGE ARCHIVE</div>
-        <h1 style={{ color: 'var(--blue)', textShadow: '3px 3px 0 var(--bd)', marginTop: '12px' }}>LEARNING MODULES</h1>
-        <p style={{ color: 'var(--muted)', marginTop: '8px' }}>Master concepts to increase your global ELO and unlock new battle arenas.</p>
+      {/* 3D NAV BACK BUTTON */}
+      <button 
+        onClick={() => navigate('/learn')} 
+        className="px-btn px-btn-o" 
+        style={{ marginBottom: '24px', fontSize: '10px' }}
+      >
+        ◀ BACK TO SUBJECTS
+      </button>
+
+      <div className="page-header" style={{ marginBottom: '32px', position: 'relative', display: 'flex', alignItems: 'flex-start', gap: '24px' }}>
+        <div style={{ flex: 1 }}>
+          <div className="chip chip-b">📖 KNOWLEDGE ARCHIVE</div>
+          <h1 style={{ color: 'var(--blue)', textShadow: '3px 3px 0 var(--bd)', marginTop: '12px' }}>
+            {subjectId ? `${subjectId.toUpperCase()} MODULES` : 'LEARNING MODULES'}
+          </h1>
+          <p style={{ color: 'var(--muted)', marginTop: '8px' }}>Master concepts to increase your global ELO and unlock new battle arenas.</p>
+        </div>
+        <img src={MASCOT.study} alt={MASCOT_ALT} style={{
+          width: 'clamp(130px, 14vw, 200px)',
+          flexShrink: 0,
+          filter: 'drop-shadow(0 0 24px rgba(162,89,255,0.5))',
+          animation: 'mascot-float 3s ease-in-out infinite',
+          marginTop: '-10px',
+        }} draggable="false" />
       </div>
 
       {/* Subject Filter Tabs */}
