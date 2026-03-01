@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './styles/base.css' // <-- CHANGE THIS LINE
+import './index.css'     // Loads Tailwind v4 & Theme
+import './styles/base.css' // Loads Retro cursors & CRT effects
 import App from './App.jsx'
 
 createRoot(document.getElementById('root')).render(

@@ -1,80 +1,93 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { supabase } from '../lib/supabaseClient';
 
 export default function AuthModal({ isOpen, onClose }) {
-  const [activeTab, setActiveTab] = useState('login');
-  const [username, setUsername] = useState('');
+  const [isLogin, setIsLogin] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
-  // Close the modal if the user presses the Escape key
-  useEffect(() => {
-    const handleEsc = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, [onClose]);
+  if (!isOpen) return null;
 
-  if (!isOpen) return null; // Don't render anything if it's closed
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const cleanUser = username.trim().toUpperCase();
-    
-    if (cleanUser) {
-      // Save to local storage
-      localStorage.setItem('vdsa_user', cleanUser);
-      
-      // Dispatch a custom event so the Navbar knows to update
-      window.dispatchEvent(new Event('authChange')); 
-      
-      // Trigger your custom pixel click sparks!
-      for (let i = 0; i < 5; i++) document.body.click(); 
-      
-      setUsername('');
-      onClose();
+    setLoading(true);
+    setErrorMsg('');
+
+    try {
+      if (isLogin) {
+        // --- SUPABASE LOGIN ---
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (error) throw error;
+        
+        console.log("✅ Successfully logged in!");
+        onClose(); // Close the modal
+        
+      } else {
+        // --- SUPABASE SIGNUP ---
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+        });
+        if (error) throw error;
+        
+        alert("Signup successful! Check your email to verify your account.");
+        setIsLogin(true); // Switch to login view
+      }
+    } catch (error) {
+      setErrorMsg(error.message);
+      console.error("Auth error:", error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="auth-modal-overlay">
       <div className="auth-modal">
-        <button className="close-btn" onClick={onClose} type="button">X</button>
-        <h2 style={{ color: 'var(--green)', marginBottom: '16px', fontFamily: '"Press Start 2P", monospace', fontSize: '12px' }}>
-          ▶ TERMINAL ACCESS
-        </h2>
+        <button className="close-btn" onClick={onClose}>[X]</button>
         
         <div className="auth-tabs">
           <button 
-            type="button"
-            className={`auth-tab ${activeTab === 'login' ? 'active' : ''}`} 
-            onClick={() => setActiveTab('login')}
+            className={`auth-tab ${isLogin ? 'active' : ''}`} 
+            onClick={() => setIsLogin(true)}
           >
             LOGIN
           </button>
           <button 
-            type="button"
-            className={`auth-tab ${activeTab === 'register' ? 'active' : ''}`} 
-            onClick={() => setActiveTab('register')}
+            className={`auth-tab ${!isLogin ? 'active' : ''}`} 
+            onClick={() => setIsLogin(false)}
           >
             SIGNUP
           </button>
         </div>
-        
+
         <form className="auth-form" onSubmit={handleSubmit}>
+          {errorMsg && <div style={{ color: 'var(--pink)', fontSize: '12px' }}>{errorMsg}</div>}
+          
           <input 
-            type="text" 
+            type="email" 
             className="auth-input" 
-            placeholder="USERNAME" 
-            autoComplete="off"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder="EMAIL_ADDRESS" 
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required 
           />
           <input 
             type="password" 
             className="auth-input" 
             placeholder="PASSWORD" 
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required 
           />
-          <button type="submit" className="px-btn px-btn-g" style={{ width: '100%', justifyContent: 'center', marginTop: '10px' }}>
-            {activeTab === 'login' ? 'INITIALIZE ▶' : 'REGISTER ▶'}
+          
+          <button type="submit" className="px-btn px-btn-g mt-4" disabled={loading}>
+            {loading ? 'PROCESSING...' : isLogin ? 'INITIATE_LINK' : 'CREATE_ENTITY'}
           </button>
         </form>
       </div>
