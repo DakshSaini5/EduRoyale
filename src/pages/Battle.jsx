@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import '../styles/battle.css';
+import { supabase } from '../lib/supabaseClient';
+import { useAuth } from '../context/AuthContext';
 
 export default function Battle() {
+  const { user } = useAuth(); // Global Auth User
+  
   const [battleState, setBattleState] = useState('idle'); // idle | search | vs | countdown | live | finished | results | review
   const [countdownText, setCountdownText] = useState('');
   const [timeLeft, setTimeLeft] = useState(30); 
   const [p1Status, setP1Status] = useState('coding'); 
   const [p2Status, setP2Status] = useState('coding'); 
-  const [hp, setHp] = useState({ p1: 100, p2: 100 });
   
   const [code, setCode] = useState('def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        # Your code here...');
   
-  // The opponent's "simulated" winning/losing code
   const enemyCode = `def binary_search(arr, target):
     left, right = 0, len(arr) - 1
     while left <= right:
@@ -24,7 +26,8 @@ export default function Battle() {
             right = mid - 1
     return -1`;
 
-  const currentUser = localStorage.getItem('vdsa_user') || 'GUEST_USER';
+  // Use the logged-in user's email prefix or fallback to GUEST
+  const currentUser = user ? user.email.split('@')[0].toUpperCase() : 'GUEST_USER';
 
   const startMatchmaking = () => {
     setBattleState('search');
@@ -67,7 +70,7 @@ export default function Battle() {
   useEffect(() => {
     let opponentTimer;
     if (battleState === 'live' && p2Status === 'coding') {
-      const randomFinishTime = Math.floor(Math.random() * 15000) + 10000; // Opponent finishes between 10-25s
+      const randomFinishTime = Math.floor(Math.random() * 15000) + 10000;
       opponentTimer = setTimeout(() => setP2Status('submitted'), randomFinishTime);
     }
     return () => clearTimeout(opponentTimer);
@@ -79,8 +82,34 @@ export default function Battle() {
     }
   }, [p1Status, p2Status, battleState]);
 
-  const triggerFinish = () => {
+  // --- SUPABASE WIN TRACKING ---
+  const triggerFinish = async () => {
     setBattleState('finished');
+    
+    // If the user is logged in, update their stats!
+    if (user) {
+      try {
+        const { data: currentStats, error: fetchError } = await supabase
+          .from('profiles')
+          .select('wins, elo, matches')
+          .eq('id', user.id)
+          .single();
+          
+        if (!fetchError && currentStats) {
+          await supabase
+            .from('profiles')
+            .update({ 
+              wins: (currentStats.wins || 0) + 1,
+              matches: (currentStats.matches || 0) + 1,
+              elo: (currentStats.elo || 1000) + 25 // Award 25 ELO for winning
+            })
+            .eq('id', user.id);
+        }
+      } catch (err) {
+        console.error("Failed to update stats:", err);
+      }
+    }
+
     setTimeout(() => setBattleState('results'), 3000);
   };
 
@@ -246,13 +275,11 @@ export default function Battle() {
 
             <div className="result-actions">
               <button className="px-btn px-btn-g" onClick={() => setBattleState('idle')}>PLAY AGAIN</button>
-              {/* NEW: Button switches to Review mode */}
               <button className="px-btn px-btn-o" onClick={() => setBattleState('review')}>REVIEW CODE</button>
             </div>
           </div>
         )}
 
-        {/* ─── NEW: POST-MATCH CODE REVIEW STATE ─── */}
         {battleState === 'review' && (
           <div className="review-state" style={{ padding: '10px 0' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
@@ -264,7 +291,6 @@ export default function Battle() {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
-              {/* YOUR CODE */}
               <div style={{ background: 'var(--card)', border: '3px solid var(--green)', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ padding: '12px', borderBottom: '2px solid var(--green)', background: 'rgba(61,255,154,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ color: 'var(--green)', fontFamily: '"Press Start 2P", monospace', fontSize: '12px' }}>{currentUser}</span>
@@ -273,7 +299,6 @@ export default function Battle() {
                 <textarea disabled value={code} style={{ flex: 1, minHeight: '400px', background: 'transparent', border: 'none', color: 'var(--white)', padding: '16px', fontFamily: '"VT323", monospace', fontSize: '20px', resize: 'none' }} />
               </div>
 
-              {/* OPPONENT CODE */}
               <div style={{ background: 'var(--card)', border: '3px solid var(--pink)', display: 'flex', flexDirection: 'column' }}>
                 <div style={{ padding: '12px', borderBottom: '2px solid var(--pink)', background: 'rgba(255,60,172,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ color: 'var(--pink)', fontFamily: '"Press Start 2P", monospace', fontSize: '12px' }}>NULL_POINTER</span>
