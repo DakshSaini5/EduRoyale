@@ -8,13 +8,14 @@ import AuthModal from './components/AuthModal';
 
 import Home from './pages/Home';
 import Battle from './pages/Battle';
-import Learn from './pages/Learn'; // Your current modules page
+import Learn from './pages/Learn'; 
 import Ranks from './pages/Rank';
 import Guild from './pages/Guild';
 import ProfilePage from './components/profile/ProfilePage';
-
-// --> ADD THE NEW 3D SELECTION COMPONENT HERE
 import SubjectSelection from './pages/SubjectSelection'; 
+
+// --> IMPORT THE LESSON MODULE HERE
+import LessonModule from './pages/LessonModule'; 
 
 export default function App() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -33,9 +34,11 @@ export default function App() {
           <Route path="/battle" element={<Battle />} />
           <Route path="/ranks" element={<Ranks />} />
           
-          {/* --> CHANGED ROUTING FOR LEARN SECTION */}
           <Route path="/learn" element={<SubjectSelection />} /> 
           <Route path="/learn/:subjectId" element={<Learn />} /> 
+          
+          {/* --> ADDED THE MISSING ROUTE HERE */}
+          <Route path="/lesson/:id" element={<LessonModule />} /> 
           
         </Routes>
       </BrowserRouter>
